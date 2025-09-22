@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template, redirect, url_for, send_from_directory
+import streamlit as st
 from werkzeug.utils import secure_filename
 import shutil
 
@@ -61,4 +61,5 @@ def index():
     return render_template('index.html', prediction=prediction_result, image=uploaded_image_path)
 
 if __name__ == '__main__':
+
     app.run(debug=True)

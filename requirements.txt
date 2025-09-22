@@ -1,0 +1,13 @@
+# Web UI
+streamlit
+pillow
+
+# Machine Learning
+tensorflow
+torch
+torchvision
+scikit-learn
+
+# Data Handling
+numpy
+pandas

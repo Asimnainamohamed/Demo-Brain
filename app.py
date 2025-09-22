@@ -1,65 +1,39 @@
-import os
+# streamlit_app.py
 import streamlit as st
-from werkzeug.utils import secure_filename
-import shutil
+import os
+import random
+from PIL import Image
 
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads')
-app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg'}
+# Title
+st.set_page_config(page_title="Brain Tumor Classifier", page_icon="🧠")
+st.title("🧠 Brain Tumor Classifier (Demo)")
 
-# Create uploads folder if it doesn't exist
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+# Allowed extensions
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
 # Class labels (for demonstration)
 class_labels = ['glioma_tumor', 'no_tumor', 'meningioma_tumor', 'pituitary_tumor']
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+# Upload section
+uploaded_file = st.file_uploader("Upload an MRI image", type=list(ALLOWED_EXTENSIONS))
 
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+if uploaded_file is not None:
+    # Show uploaded image
+    image = Image.open(uploaded_file)
+    st.image(image, caption="Uploaded MRI Image", use_column_width=True
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    prediction_result = None
-    uploaded_image_path = None
-    
-    if request.method == 'POST':
-        # Check if a file was uploaded
-        if 'file' not in request.files:
-            return render_template('index.html', error='No file part')
-        
-        file = request.files['file']
-        
-        # If user doesn't select file, browser also submits an empty part without filename
-        if file.filename == '':
-            return render_template('index.html', error='No selected file')
-        
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)
-            
-            try:
-                # For demonstration: simulate a prediction
-                # In a real app, this would use the model to make a prediction
-                import random
-                predicted_class = random.choice(class_labels)
-                confidence = random.uniform(85.0, 99.9)
-                
-                prediction_result = {
-                    'class': predicted_class.replace('_', ' ').title(),
-                    'confidence': confidence
-                }
-                
-                # Save the path for displaying the image
-                uploaded_image_path = filename
-            except Exception as e:
-                return render_template('index.html', error=f'Error processing image: {str(e)}')
-    
-    return render_template('index.html', prediction=prediction_result, image=uploaded_image_path)
+    # Prediction button
+    if st.button("Predict"):
+        try:
+            # Simulate prediction (replace with ML model later)
+            predicted_class = random.choice(class_labels)
+            confidence = random.uniform(85.0, 99.9)
 
-if __name__ == '__main__':
+            # Show result
+            st.success(f"🎯 Prediction: **{predicted_class.replace('_', ' ').title()}**")
+            st.info(f"📊 Confidence: {confidence:.2f}%")
 
-    app.run(debug=True)
+        except Exception as e:
+            st.error(f"Error processing image: {str(e)}")
+else:
+    st.warning("Please upload a PNG/JPG/JPEG image to continue.")

@@ -1,8 +1,8 @@
-setuptools>=65.5.0
+setuptools
 wheel
-Flask==2.3.2
-tensorflow>=2.13,<2.21
-numpy==1.25.2
-pillow==10.0.0
-opencv-python-headless==4.8.1.78
-gunicorn==20.1.0
+Flask
+tensorflow
+numpy
+pillow
+opencv-python-headless
+gunicorn

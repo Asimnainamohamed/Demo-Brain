@@ -1,14 +1,6 @@
-# Web UI
-streamlit
-pillow
-gunicorn
-
-# Machine Learning
-tensorflow
-torch
-torchvision
-scikit-learn
-
-# Data Handling
-numpy
-pandas
+Flask==2.3.2
+tensorflow==2.13.0
+numpy==1.25.2
+pillow==10.0.0
+opencv-python==4.8.1.78
+gunicorn==20.1.0

@@ -1,0 +1,15 @@
+# render.yaml example for a Python web service
+services:
+  - type: web
+    name: brain-mri-classifier
+    env: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 2 --threads 4 --timeout 60
+    disk: 512
+    envVars:
+      - key: MODEL_PATH
+        value: model.h5
+      - key: LABELS_PATH
+        value: labels.json

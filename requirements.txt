@@ -1,6 +1,7 @@
 # Web UI
 streamlit
 pillow
+gunicorn
 
 # Machine Learning
 tensorflow

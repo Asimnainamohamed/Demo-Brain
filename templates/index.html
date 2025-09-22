@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Tumor Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Brain Tumor Detection</h1>
+            <p>Upload an MRI scan to detect brain tumors</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="file-upload">
+                        <label for="file-input">
+                            <div class="upload-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                            </div>
+                            <span>Choose an MRI image</span>
+                        </label>
+                        <input id="file-input" type="file" name="file" accept=".jpg, .jpeg, .png">
+                    </div>
+                    <button type="submit" class="submit-btn">Analyze Image</button>
+                </form>
+            </div>
+
+            {% if error %}
+            <div class="error-message">
+                <p>{{ error }}</p>
+            </div>
+            {% endif %}
+
+            {% if image %}
+            <div class="result-section">
+                <div class="image-preview">
+                    <h3>Uploaded Image</h3>
+                    <img src="{{ url_for('static', filename='uploads/' + image) }}" alt="Uploaded MRI scan">
+                </div>
+
+                {% if prediction %}
+                <div class="prediction-result">
+                    <h3>Analysis Result</h3>
+                    <div class="result-card {% if prediction.class == 'No Tumor' %}no-tumor{% else %}tumor-detected{% endif %}">
+                        <div class="result-icon">
+                            {% if prediction.class == 'No Tumor' %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            {% endif %}
+                        </div>
+                        <div class="result-details">
+                            <h4>{{ prediction.class }}</h4>
+                            <p>Confidence: {{ prediction.confidence|round(2) }}%</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Brain Tumor Detection System</p>
+        </footer>
+    </div>
+
+    <script>
+        // Display file name when selected
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : 'Choose an MRI image';
+            const fileLabel = this.previousElementSibling.querySelector('span');
+            fileLabel.textContent = fileName;
+        });
+    </script>
+</body>
+</html>

@@ -20,7 +20,7 @@ uploaded_file = st.file_uploader("Upload an MRI image", type=list(ALLOWED_EXTENS
 if uploaded_file is not None:
     # Show uploaded image
     image = Image.open(uploaded_file)
-    st.image(image, caption="Uploaded MRI Image", use_column_width=True
+    st.image(image, caption="Uploaded MRI Image", use_column_width=True)
 
     # Prediction button
     if st.button("Predict"):
@@ -37,3 +37,4 @@ if uploaded_file is not None:
             st.error(f"Error processing image: {str(e)}")
 else:
     st.warning("Please upload a PNG/JPG/JPEG image to continue.")
+
